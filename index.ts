@@ -1,26 +1,26 @@
 import { google } from "googleapis";
 
 interface GoogleSheetsConfig {
-  credentialsPath: string;
+  credentialsPath?: string;
   spreadsheetId: string;
   sheetName: string;
 }
 
 export class GSheets {
-  private readonly credentialsPath: string;
+  private readonly credentialsPath?: string;
   private readonly spreadsheetId: string;
   private readonly sheetName: string;
   private mainInstance: any; // Main instance for working with Google Sheets
 
   constructor(config: GoogleSheetsConfig) {
-    if (!config.credentialsPath)
-      throw new Error("❌ Path to credentials.json is required");
     if (!config.spreadsheetId)
       throw new Error("❌ ID of spreadsheet is required");
     if (!config.sheetName)
       throw new Error("❌ Name of sheet in your spreadsheet is required");
 
-    this.credentialsPath = config.credentialsPath;
+    this.credentialsPath = config.credentialsPath
+      ? config.credentialsPath
+      : "./credentials.json";
     this.spreadsheetId = config.spreadsheetId;
     this.sheetName = config.sheetName;
   }
@@ -34,6 +34,9 @@ export class GSheets {
   // Initilase credentials from path
   private async initializeCredentials() {
     try {
+      if (!this.credentialsPath) {
+        throw new Error("❌ Credentials path is undefined.");
+      }
       const credentials = await Bun.file(this.credentialsPath).json();
       const auth = new google.auth.GoogleAuth({
         credentials,
@@ -45,7 +48,6 @@ export class GSheets {
         version: "v4",
         auth: authClient as any,
       });
-      console.log("✅ Auth success!");
     } catch (error) {
       throw new Error("❌ Error loading credentials: " + error);
     }
