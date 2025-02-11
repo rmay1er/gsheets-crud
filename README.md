@@ -1,6 +1,14 @@
 # GSheets CRUD Library
 
-A lightweight and modern TypeScript library for performing CRUD (Create, Read, Update, Delete) operations on Google Sheets using the Google Sheets API. Built with ES6+ features and designed for Bun environments.
+<div align="center">
+  <h1 align="center">GSheets CRUD Library</h1>
+  <p>A lightweight and modern TypeScript library for performing CRUD operations on Google Sheets using the Google Sheets API. Built with ES6+ features and designed for Bun environments.</p>
+</div>
+
+<div align="center">
+  <img alt="TypeScript" src="https://img.shields.io/badge/-TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" />
+  <img alt="Bun" src="https://img.shields.io/badge/-Bun-000000?style=for-the-badge&logo=bun&logoColor=white" />
+</div>
 
 ---
 
@@ -161,4 +169,3 @@ If you find this library useful, consider giving it a ⭐️ on GitHub or [buyin
 
 **Ruslan Mayer**
 GitHub: [rstupa](https://github.com/rstupa)
-```
