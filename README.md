@@ -1,6 +1,6 @@
 # GSheets CRUD Library
 
-A lightweight and modern TypeScript library for performing CRUD (Create, Read, Update, Delete) operations on Google Sheets using the Google Sheets API. Built with ES6+ features and designed for Node.js environments.
+A lightweight and modern TypeScript library for performing CRUD (Create, Read, Update, Delete) operations on Google Sheets using the Google Sheets API. Built with ES6+ features and designed for Bun environments.
 
 ---
 
@@ -17,13 +17,9 @@ A lightweight and modern TypeScript library for performing CRUD (Create, Read, U
 
 ## Installation
 
-Install the library using your preferred package manager:
+Install the library using Bun:
 
 ```bash
-npm install gsheets-crud
-# or
-yarn add gsheets-crud
-# or
 bun add gsheets-crud
 ```
 
@@ -31,12 +27,16 @@ bun add gsheets-crud
 
 ## Prerequisites
 
-1. **Google API Credentials**:
+1. **Bun Runtime**:
+   - This library is designed to work exclusively with the [Bun](https://bun.sh) runtime.
+   - Make sure you have Bun installed. You can install it by following the [official installation guide](https://bun.sh/docs/installation).
+
+2. **Google API Credentials**:
    - Create a project in the [Google Cloud Console](https://console.cloud.google.com/).
    - Enable the **Google Sheets API** and **Google Drive API**.
    - Download the credentials JSON file and save it as `credentials.json` in your project root.
 
-2. **Spreadsheet Access**:
+3. **Spreadsheet Access**:
    - Share your Google Sheet with the email address from your credentials file.
 
 ---
@@ -161,3 +161,4 @@ If you find this library useful, consider giving it a ⭐️ on GitHub or [buyin
 
 **Ruslan Mayer**
 GitHub: [rstupa](https://github.com/rstupa)
+```
