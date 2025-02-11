@@ -4,16 +4,17 @@
   "description": "A library for CRUD operations on Google Sheets",
   "main": "./dist/gsheetsCrud.js",
   "types": "./dist/gsheetsCrud.d.ts",
-  "module": "gsheetsCrud.ts",
+  "module": "./dist/gsheetsCrud.js",
   "type": "module",
   "exports": {
-    ".": {
-      "import": "./dist/gsheetsCrud.js",
-      "types": "./dist/gsheetsCrud.d.ts"
-    }
+    "import": "./dist/gsheetsCrud.js",
+    "types": "./dist/gsheetsCrud.d.ts"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "bun build ./gsheetsCrud.ts --target bun --outdir dist --format esm && tsc",
+    "build": "bun build ./gsheetsCrud.ts --target bun --outdir dist --format esm --external googleapis --minify && tsc",
     "start": "bun run ./dist/gsheetsCrud.js",
     "test": "bun test"
   },
@@ -21,9 +22,7 @@
     "@types/bun": "latest"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
-  "dependencies": {
+    "typescript": "^5.0.0",
     "googleapis": "^144.0.0"
   },
   "author": "Ruslan Mayer https://github.com/rstupa",
