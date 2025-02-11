@@ -1,0 +1,24 @@
+{
+  "name": "gsheets-crud",
+  "version": "1.0.0",
+  "description": "Google Sheets CRUD",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "module": "index.ts",
+  "type": "module",
+  "exports": {
+      ".": {
+        "import": "./dist/index.js",
+        "types": "./dist/index.d.ts"
+        }
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "googleapis": "^144.0.0"
+  }
+}
