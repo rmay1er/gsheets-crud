@@ -235,17 +235,22 @@ export class GSheets {
 
       const headers = response.data.values[0];
 
+      // Prepare update requests for each specified index
       const requests = indexes.map((rowIndex) => {
-        const existingRow = response.data.values[rowIndex] || [];
+        const rowRangeStart = `${this.sheetName}!A${rowIndex}`;
+        const existingRow = response.data.values[rowIndex - 1] || [];
 
-        const updatedValues = headers.map((header: string) => {
-          return rowData[header] !== undefined
-            ? rowData[header]
-            : existingRow[headers.indexOf(header)];
-        });
+        // Only update specified keys in rowData
+        const updatedValues = [...existingRow];
+        for (const [key, value] of Object.entries(rowData)) {
+          const index = headers.indexOf(key);
+          if (index > -1) {
+            updatedValues[index] = value;
+          }
+        }
 
         return {
-          range: `${this.sheetName}!A${rowIndex}`,
+          range: rowRangeStart,
           values: [updatedValues],
         };
       });
