@@ -154,3 +154,22 @@ This project is licensed under the MIT License.
 ## Support
 
 If you find this library useful, consider giving it a ⭐️ on GitHub or [buying me a coffee](https://www.buymeacoffee.com/rstupa).
+
+---
+
+## Author
+
+**Ruslan Mayer**
+GitHub: [rstupa](https://github.com/rstupa)
+
+---
+
+## Keywords
+
+- google-sheets
+- crud
+- typescript
+- nodejs
+- api
+- spreadsheet
+- automation
