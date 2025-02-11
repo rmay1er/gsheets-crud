@@ -133,6 +133,17 @@ export class GSheets {
       let headers = response.data.values ? response.data.values[0] : null;
       let values;
 
+      // Check that all keys in rowData start with an uppercase letter
+      const invalidKey = Object.keys(rowData).find(
+        (key) => key[0] !== key[0].toUpperCase(),
+      );
+
+      if (invalidKey) {
+        throw new Error(
+          `❌ Key "${invalidKey}" must start with an uppercase letter.`,
+        );
+      }
+
       if (!headers) {
         headers = Object.keys(rowData);
         values = headers.map((header: any) => rowData[header] || "");
