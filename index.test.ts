@@ -1,7 +1,7 @@
 import { GSheets } from "./index.ts";
 import { expect, test, describe } from "bun:test";
 
-describe("GSheets", () => {
+describe("GSheets methods", () => {
   test("create should initialize a sheet", async () => {
     const sheet = await GSheets.create({
       spreadsheetId: "19MoJAvrt26b-shxUmofWlEn1rqzuwkfQXqqzHJSVDkU",
@@ -25,6 +25,48 @@ describe("GSheets", () => {
     expect(result).toBeTruthy();
   });
 
+  test("updateRow should update a row in the sheet", async () => {
+    const sheet = await GSheets.create({
+      spreadsheetId: "19MoJAvrt26b-shxUmofWlEn1rqzuwkfQXqqzHJSVDkU",
+      sheetName: "test",
+    });
+
+    const result = await sheet.updateRow(4, { Name: "Sasha" });
+    expect(result).toBeTruthy();
+  });
+
+  test("findRow by index should find a row in the sheet", async () => {
+    const sheet = await GSheets.create({
+      spreadsheetId: "19MoJAvrt26b-shxUmofWlEn1rqzuwkfQXqqzHJSVDkU",
+      sheetName: "test",
+    });
+
+    const result = await sheet.findRow(2);
+    expect(result).toBeTruthy();
+  });
+
+  test("findRow by query should find a rows in the sheet", async () => {
+    const sheet = await GSheets.create({
+      spreadsheetId: "19MoJAvrt26b-shxUmofWlEn1rqzuwkfQXqqzHJSVDkU",
+      sheetName: "test",
+    });
+
+    const result = await sheet.findRow({ Name: "Sasha" });
+    expect(result).toBeTruthy();
+  });
+
+  test("deleteRow should delete a row from the sheet", async () => {
+    const sheet = await GSheets.create({
+      spreadsheetId: "19MoJAvrt26b-shxUmofWlEn1rqzuwkfQXqqzHJSVDkU",
+      sheetName: "test",
+    });
+
+    const result = await sheet.deleteRow(3);
+    expect(result).toBeTruthy();
+  });
+});
+
+describe("GSheets errors", () => {
   test("addRow should throw error if keys aren't uppercase", async () => {
     const sheet = await GSheets.create({
       spreadsheetId: "19MoJAvrt26b-shxUmofWlEn1rqzuwkfQXqqzHJSVDkU",
@@ -40,14 +82,34 @@ describe("GSheets", () => {
     ).rejects.toThrow();
   });
 
-  test("updateRow should update a row in the sheet", async () => {
+  test("findRow should throw error if keys aren't uppercase", async () => {
     const sheet = await GSheets.create({
       spreadsheetId: "19MoJAvrt26b-shxUmofWlEn1rqzuwkfQXqqzHJSVDkU",
       sheetName: "test",
     });
 
-    const result = await sheet.updateRow(4, { Name: "Sasha" });
-    expect(result).toBeTruthy();
+    expect(
+      sheet.findRow({
+        name: "Test",
+        Age: "test age",
+        Quality: "test quality",
+      }),
+    ).rejects.toThrow();
+  });
+
+  test("findRow should throw error if rowIndexes include 1", async () => {
+    const sheet = await GSheets.create({
+      spreadsheetId: "19MoJAvrt26b-shxUmofWlEn1rqzuwkfQXqqzHJSVDkU",
+      sheetName: "test",
+    });
+
+    expect(
+      sheet.findRow({
+        name: "Test",
+        Age: "test age",
+        Quality: "test quality",
+      }),
+    ).rejects.toThrow();
   });
 
   test("updateRow should throw error if keys aren't uppercase", async () => {
@@ -66,15 +128,5 @@ describe("GSheets", () => {
     });
 
     expect(sheet.updateRow(1, { Name: "not updated row" })).rejects.toThrow();
-  });
-
-  test("deleteRow should delete a row from the sheet", async () => {
-    const sheet = await GSheets.create({
-      spreadsheetId: "19MoJAvrt26b-shxUmofWlEn1rqzuwkfQXqqzHJSVDkU",
-      sheetName: "test",
-    });
-
-    const result = await sheet.deleteRow(3);
-    expect(result).toBeTruthy();
   });
 });
