@@ -93,6 +93,16 @@ export class GSheets {
       } else {
         rows.forEach((row: any, index: number) => {
           if (index === 0) return; // Skip header row
+          // Check that all keys in rowData start with an uppercase letter
+          const invalidKey = Object.keys(query).find(
+            (key) => key[0] !== key[0].toUpperCase(),
+          );
+
+          if (invalidKey) {
+            throw new Error(
+              `❌ Key "${invalidKey}" must start with an uppercase letter.`,
+            );
+          }
           const matchesQuery = Object.entries(query).every(([key, value]) => {
             const colIndex = headers.indexOf(key);
             if (colIndex === -1) return false;
