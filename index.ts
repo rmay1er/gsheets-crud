@@ -83,6 +83,10 @@ export class GSheets {
       let results = [];
 
       if (typeof query === "number") {
+        // Check for invalid row index 1
+        if (query === 1) {
+          throw new Error("❌ Row index cannot be 1, because it header'.");
+        }
         if (query <= rows.length) {
           const data: Record<string, any> = {};
           headers.forEach((header: any, index: number) => {
@@ -133,7 +137,7 @@ export class GSheets {
   }
 
   // Add new row with data to the table. If headers are missing, they will be created.
-  async addRow(rowData: Record<string, any>) {
+  async addRow(rowData: Record<string, string>) {
     try {
       const response = await this.mainInstance.spreadsheets.values.get({
         spreadsheetId: this.spreadsheetId,
@@ -202,7 +206,10 @@ export class GSheets {
   }
 
   // Update rows by specified indexes with new data.
-  async updateRow(rowIndexes: number[] | number, rowData: Record<string, any>) {
+  async updateRow(
+    rowIndexes: number[] | number,
+    rowData: Record<string, string>,
+  ) {
     try {
       // Convert input data to an array if it's not an array
       const indexes = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];
