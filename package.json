@@ -1,16 +1,21 @@
 {
   "name": "gsheets-crud",
   "version": "1.0.0",
-  "description": "Google Sheets CRUD",
+  "description": "A library for CRUD operations on Google Sheets",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "module": "index.ts",
   "type": "module",
   "exports": {
-      ".": {
-        "import": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-        }
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "bun build ./index.ts --target bun --outdir dist --format esm && tsc",
+    "start": "bun run ./dist/index.js",
+    "test": "bun test"
   },
   "devDependencies": {
     "@types/bun": "latest"
@@ -20,5 +25,7 @@
   },
   "dependencies": {
     "googleapis": "^144.0.0"
-  }
+  },
+  "author": "Ruslan Mayer https://github.com/rstupa",
+  "license": "MIT"
 }

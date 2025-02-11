@@ -26,6 +26,6 @@
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false
   },
-  "include": ["index.ts"],
+  "include": ["gsheetsCrud.ts"],
   "exclude": ["node_modules", "dist"]
 }

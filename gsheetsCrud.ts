@@ -1,17 +1,33 @@
 import { google } from "googleapis";
 
+/**
+ * Configuration interface for Google Sheets API operations
+ * @typedef {Object} GoogleSheetsConfig
+ * @property {string} [credentialsPath] - Path to Google API credentials file (default: './credentials.json')
+ * @property {string} spreadsheetId - ID of the Google Spreadsheet to work with
+ * @property {string} sheetName - Name of the specific sheet within the spreadsheet
+ */
 interface GoogleSheetsConfig {
   credentialsPath?: string;
   spreadsheetId: string;
   sheetName: string;
 }
 
+/**
+ * Class providing CRUD operations for Google Sheets
+ */
 export class GSheets {
   private readonly credentialsPath?: string;
   private readonly spreadsheetId: string;
   private readonly sheetName: string;
-  private mainInstance: any; // Main instance for working with Google Sheets
+  /** @private Main Google Sheets API instance */
+  private mainInstance: any;
 
+  /**
+   * Creates a new GSheets instance
+   * @param {GoogleSheetsConfig} config - Configuration object
+   * @throws {Error} If spreadsheetId or sheetName are missing
+   */
   constructor(config: GoogleSheetsConfig) {
     if (!config.spreadsheetId)
       throw new Error("❌ ID of spreadsheet is required");
@@ -24,14 +40,24 @@ export class GSheets {
     this.spreadsheetId = config.spreadsheetId;
     this.sheetName = config.sheetName;
   }
-  // Create new instance of GSheets
+
+  /**
+   * Factory method to create a ready-to-use GSheets instance
+   * @static
+   * @param {GoogleSheetsConfig} config - Configuration object
+   * @returns {Promise<GSheets>} Initialized GSheets instance
+   */
   static async create(config: GoogleSheetsConfig): Promise<GSheets> {
     const instance = new GSheets(config);
     await instance.initializeCredentials();
     return instance;
   }
 
-  // Initilase credentials from path
+  /**
+   * Initializes Google API credentials
+   * @private
+   * @throws {Error} If credentials loading fails
+   */
   private async initializeCredentials() {
     try {
       if (!this.credentialsPath) {
@@ -53,7 +79,12 @@ export class GSheets {
     }
   }
 
-  // Get sheet ID by name for batchUpdate method
+  /**
+   * Retrieves sheet ID by sheet name
+   * @private
+   * @returns {Promise<number>} Numeric sheet ID
+   * @throws {Error} If sheet ID retrieval fails
+   */
   private async getSheetId() {
     try {
       const sheetsResponse = await this.mainInstance.spreadsheets.get({
@@ -68,7 +99,12 @@ export class GSheets {
     }
   }
 
-  // Find row by query, query can be number or object with key-value pairs
+  /**
+   * Finds rows matching the query criteria
+   * @param {number|Object} query - Row index (number) or search criteria (object)
+   * @returns {Promise<Array<{rowIndex: number, data: Object}>>} Array of matching rows
+   * @throws {Error} If query execution fails or invalid key format
+   */
   async findRow(query: number | Record<string, string>) {
     try {
       const response = await this.mainInstance.spreadsheets.values.get({
@@ -85,7 +121,6 @@ export class GSheets {
       let results = [];
 
       if (typeof query === "number") {
-        // Check for invalid row index 1
         if (query === 1) {
           throw new Error("❌ Row index cannot be 1, because it header'.");
         }
@@ -98,8 +133,7 @@ export class GSheets {
         }
       } else {
         rows.forEach((row: any, index: number) => {
-          if (index === 0) return; // Skip header row
-          // Check that all keys in rowData start with an uppercase letter
+          if (index === 0) return;
           const invalidKey = Object.keys(query).find(
             (key) => key[0] !== key[0].toUpperCase(),
           );
@@ -138,7 +172,12 @@ export class GSheets {
     }
   }
 
-  // Add new row with data to the table. If headers are missing, they will be created.
+  /**
+   * Adds a new row to the sheet, creating headers if missing
+   * @param {Object} rowData - Data to add (keys must start with uppercase)
+   * @returns {Promise<{rowIndex: number, rowData: Object}>} Added row info
+   * @throws {Error} If operation fails or invalid key format
+   */
   async addRow(rowData: Record<string, string>) {
     try {
       const response = await this.mainInstance.spreadsheets.values.get({
@@ -149,7 +188,6 @@ export class GSheets {
       let headers = response.data.values ? response.data.values[0] : null;
       let values;
 
-      // Check that all keys in rowData start with an uppercase letter
       const invalidKey = Object.keys(rowData).find(
         (key) => key[0] !== key[0].toUpperCase(),
       );
@@ -164,7 +202,6 @@ export class GSheets {
         headers = Object.keys(rowData);
         values = headers.map((header: any) => rowData[header] || "");
 
-        // Add headers to the table
         await this.mainInstance.spreadsheets.values.update({
           spreadsheetId: this.spreadsheetId,
           range: this.sheetName,
@@ -172,14 +209,12 @@ export class GSheets {
           resource: { values: [headers] },
         });
       } else {
-        // Add missing keys to headers
         Object.keys(rowData).forEach((key) => {
           if (!headers.includes(key)) {
             headers.push(key);
           }
         });
 
-        // Update headers in the table if they have changed
         await this.mainInstance.spreadsheets.values.update({
           spreadsheetId: this.spreadsheetId,
           range: this.sheetName,
@@ -207,20 +242,23 @@ export class GSheets {
     }
   }
 
-  // Update rows by specified indexes with new data.
+  /**
+   * Updates specified rows with new data
+   * @param {number|number[]} rowIndexes - Single index or array of indexes
+   * @param {Object} rowData - Data to update (keys must start with uppercase)
+   * @returns {Promise<any>} API response
+   * @throws {Error} If operation fails or invalid key format
+   */
   async updateRow(
     rowIndexes: number[] | number,
     rowData: Record<string, string>,
   ) {
     try {
-      // Convert input data to an array if it's not an array
       const indexes = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];
 
-      // Check for invalid row index 1
       if (indexes.includes(1)) {
         throw new Error("❌ Row index cannot be 1, because it header'.");
       }
-      // Check that all keys in rowData start with an uppercase letter
       const invalidKey = Object.keys(rowData).find(
         (key) => key[0] !== key[0].toUpperCase(),
       );
@@ -237,12 +275,10 @@ export class GSheets {
 
       const headers = response.data.values[0];
 
-      // Prepare update requests for each specified index
       const requests = indexes.map((rowIndex) => {
         const rowRangeStart = `${this.sheetName}!A${rowIndex}`;
         const existingRow = response.data.values[rowIndex - 1] || [];
 
-        // Only update specified keys in rowData
         const updatedValues = [...existingRow];
         for (const [key, value] of Object.entries(rowData)) {
           const index = headers.indexOf(key);
@@ -270,14 +306,15 @@ export class GSheets {
     }
   }
 
-  // Delete rows by specified indexes.
+  /**
+   * Deletes specified rows from the sheet
+   * @param {number|number[]} rowIndexes - Single index or array of indexes
+   * @returns {Promise<{countOfDeletedRows: number}>} Deletion result
+   * @throws {Error} If operation fails
+   */
   async deleteRow(rowIndexes: number[] | number) {
     try {
-      // Convert input data to an array if it's not an array
       const indexes = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];
-
-      // Sort indexes in reverse order so deletion starts from the end
-      // This prevents index shifting when deleting multiple rows
       const sortedIndexes = indexes.sort((a, b) => b - a);
 
       const sheetId = await this.getSheetId();
@@ -303,17 +340,19 @@ export class GSheets {
     }
   }
 
+  /**
+   * Converts Google Drive share link to direct download link
+   * @param {string} url - Google Drive share URL
+   * @returns {string} Direct download URL or original if conversion fails
+   */
   async convertGoogleDriveLink(url: string) {
-    // Regular expression to find file ID
     const regex = /\/d\/([a-zA-Z0-9_-]+)/;
     const match = url.match(regex);
 
     if (match && match[1]) {
-      // Form direct link
       return `https://drive.google.com/uc?id=${match[1]}`;
     }
 
-    // If ID is not found, return the original link
     return url;
   }
 }

@@ -1,4 +1,4 @@
-import { GSheets } from "./index.ts";
+import { GSheets } from "./gsheetsCrud.ts";
 import { expect, test, describe } from "bun:test";
 
 describe("GSheets methods", () => {
