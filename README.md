@@ -161,15 +161,3 @@ If you find this library useful, consider giving it a ⭐️ on GitHub or [buyin
 
 **Ruslan Mayer**
 GitHub: [rstupa](https://github.com/rstupa)
-
----
-
-## Keywords
-
-- google-sheets
-- crud
-- typescript
-- nodejs
-- api
-- spreadsheet
-- automation
