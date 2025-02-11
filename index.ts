@@ -218,7 +218,16 @@ export class GSheets {
       if (indexes.includes(1)) {
         throw new Error("❌ Row index cannot be 1, because it header'.");
       }
+      // Check that all keys in rowData start with an uppercase letter
+      const invalidKey = Object.keys(rowData).find(
+        (key) => key[0] !== key[0].toUpperCase(),
+      );
 
+      if (invalidKey) {
+        throw new Error(
+          `❌ Key "${invalidKey}" must start with an uppercase letter.`,
+        );
+      }
       const response = await this.mainInstance.spreadsheets.values.get({
         spreadsheetId: this.spreadsheetId,
         range: this.sheetName,
@@ -248,7 +257,6 @@ export class GSheets {
           data: requests,
         },
       });
-      delete result.data.responses;
       return result.data;
     } catch (error) {
       throw new Error("❌ Error updating row: " + error);
