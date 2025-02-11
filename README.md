@@ -1,5 +1,3 @@
-# GSheets CRUD Library
-
 <div align="center">
   <h1 align="center">GSheets CRUD Library</h1>
   <p>A lightweight and modern TypeScript library for performing CRUD operations on Google Sheets using the Google Sheets API. Built with ES6+ features and designed for Bun environments.</p>
