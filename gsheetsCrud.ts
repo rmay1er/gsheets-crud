@@ -347,6 +347,13 @@ export class GSheets {
    */
   async convertGoogleDriveLink(url: string) {
     const regex = /\/d\/([a-zA-Z0-9_-]+)/;
+
+    // Проверка, что параметр url определен и является строкой
+    if (typeof url !== "string") {
+      console.error("Invalid URL provided. Expected a string, but got:", url);
+      return url; // возвращаем исходный url в случае неверного формата
+    }
+
     try {
       const match = url.match(regex);
 
@@ -354,8 +361,10 @@ export class GSheets {
         return `https://drive.google.com/uc?id=${match[1]}`;
       }
 
+      console.warn("No match found in the provided URL:", url);
       return url;
     } catch (error) {
+      console.error("Error occurred during URL conversion:", error);
       throw error;
     }
   }
