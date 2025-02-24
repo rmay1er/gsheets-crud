@@ -347,12 +347,16 @@ export class GSheets {
    */
   async convertGoogleDriveLink(url: string) {
     const regex = /\/d\/([a-zA-Z0-9_-]+)/;
-    const match = url.match(regex);
+    try {
+      const match = url.match(regex);
 
-    if (match && match[1]) {
-      return `https://drive.google.com/uc?id=${match[1]}`;
+      if (match && match[1]) {
+        return `https://drive.google.com/uc?id=${match[1]}`;
+      }
+
+      return url;
+    } catch (error) {
+      throw error;
     }
-
-    return url;
   }
 }

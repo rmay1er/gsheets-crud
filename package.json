@@ -1,6 +1,6 @@
 {
   "name": "gsheets-crud",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A TypeScript library for performing CRUD operations on Google Sheets via the Google Sheets API. Ideal for Node.js applications requiring spreadsheet automation and API integration.",
   "main": "./dist/gsheetsCrud.js",
   "types": "./dist/gsheetsCrud.d.ts",
