@@ -1,6 +1,6 @@
 {
   "name": "gsheets-crud",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A TypeScript library for performing CRUD operations on Google Sheets via the Google Sheets API. Ideal for Node.js applications requiring spreadsheet automation and API integration.",
   "main": "./dist/gsheetsCrud.js",
   "types": "./dist/gsheetsCrud.d.ts",
@@ -14,16 +14,18 @@
     "dist"
   ],
   "scripts": {
-    "build": "bun build ./gsheetsCrud.ts --target bun --outdir dist --format esm && tsc",
+    "build": "bun build ./gsheetsCrud.ts --target bun --outdir dist --external googleapis --format esm && tsc",
     "start": "bun run ./dist/gsheetsCrud.js",
     "test": "bun test"
+  },
+  "dependencies": {
+    "googleapis": "^144.0.0"
   },
   "devDependencies": {
     "@types/bun": "latest"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0",
-    "googleapis": "^144.0.0"
+    "typescript": "^5.0.0"
   },
   "keywords": [
     "google-sheets",
