@@ -166,4 +166,4 @@ If you find this library useful, consider giving it a ⭐️ on GitHub.
 ## Author
 
 **Ruslan Mayer**
-GitHub: [rstupa](https://github.com/rmay1er)
+GitHub: [rmayer](https://github.com/rmay1er)
