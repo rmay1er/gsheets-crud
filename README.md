@@ -159,11 +159,11 @@ This project is licensed under the MIT License.
 
 ## Support
 
-If you find this library useful, consider giving it a ⭐️ on GitHub or [buying me a coffee](https://www.buymeacoffee.com/rstupa).
+If you find this library useful, consider giving it a ⭐️ on GitHub.
 
 ---
 
 ## Author
 
 **Ruslan Mayer**
-GitHub: [rstupa](https://github.com/rstupa)
+GitHub: [rstupa](https://github.com/rmay1er)
